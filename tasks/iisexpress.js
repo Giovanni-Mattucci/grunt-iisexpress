@@ -25,8 +25,8 @@ module.exports = function(grunt) {
 		}
 
 		// Convert options to command line parameter format
-		var args = _.map(_.pairs(_.omit(options, ['cmd', 'keepalive', 'killOn', 'killOnExit', 'open', 'openPath', 'openUrl', 'verbose'])), function(option) {
-			if (option[0] == 'path') {
+		var args = _.map(_.toPairs(_.omit(options, ['cmd', 'keepalive', 'killOn', 'killOnExit', 'open', 'openPath', 'openUrl', 'verbose'])), function(option) {
+			if (option[0] === 'path') {
 				option[1] = require('path').resolve(option[1]);
 			}
 			return '-' + option[0] + ':' + option[1];
@@ -74,13 +74,32 @@ module.exports = function(grunt) {
 					grunt.log.writeln('Waiting forever...');
 				}
 			});
+            if (keepAlive && !done) {
+                var waitForever = this.async(); // grunt will not finish the task
+                grunt.log.writeln('Waiting forever...');
+            }
+		}
+  
+        function kill() {
+			if (killed) {
+				return;
+			}
+			if (options.verbose) {
+				grunt.log.write('Stopping IIS Express..');
+			}
+			spawn.kill();
+			killed = true;
+			if (options.verbose) {
+				grunt.log.write(' ');
+				grunt.log.ok();
+			}
 		}
 
-		if (keepAlive && !done) {
-			var waitForever = this.async(); // grunt will not finish the task
-			grunt.log.writeln('Waiting forever...');
+		function killAndExit() {
+			kill();
+			process.exit();
 		}
-
+        
 		if (options.killOn !== '') {
 			// Register event listener to use to kill spawned process
 			grunt.event.on(options.killOn, kill);
@@ -104,24 +123,6 @@ module.exports = function(grunt) {
 			process.on('SIGBREAK', killAndExit);
 		}
 
-		function kill() {
-			if (killed) {
-				return;
-			}
-			if (options.verbose) {
-				grunt.log.write('Stopping IIS Express..');
-			}
-			spawn.kill();
-			killed = true;
-			if (options.verbose) {
-				grunt.log.write(' ');
-				grunt.log.ok();
-			}
-		}
-
-		function killAndExit() {
-			kill();
-			process.exit();
-		}
+		
 	});
 };

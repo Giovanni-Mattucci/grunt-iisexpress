@@ -1,7 +1,7 @@
 {
   "name": "grunt-iisexpress",
   "description": "Start an IIS Express process",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "homepage": "https://github.com/rpeterclark/grunt-iisexpress",
   "author": {
     "name": "R. Peter Clark",
@@ -28,18 +28,18 @@
     "test": "grunt test"
   },
   "devDependencies": {
-    "grunt-contrib-jshint": "~0.1.1",
-    "grunt-contrib-clean": "~0.4.0",
-    "grunt-contrib-nodeunit": "~0.1.2",
-    "grunt": "~0.4.1"
+    "grunt-contrib-jshint": "~1.0.0",
+    "grunt-contrib-clean": "~1.0.0",
+    "grunt-contrib-nodeunit": "~1.0.0",
+    "grunt": "~1.0.1"
   },
   "peerDependencies": {
-    "grunt": "~0.4.1"
+    "grunt": "~1.0.1"
   },
   "keywords": [
     "gruntplugin"
   ],
   "dependencies": {
-    "open": "0.0.4"
+    "open": "0.0.5"
   }
 }
